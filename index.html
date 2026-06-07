@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沖縄旅行 持ち物チェックリスト</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ocean: #0077b6;
+    --ocean-light: #90e0ef;
+    --ocean-dark: #023e8a;
+    --sand: #f8f3e8;
+    --sand-dark: #e8dcc8;
+    --coral: #e07060;
+    --coral-light: #f9e0db;
+    --text: #1a2e3a;
+    --text-muted: #6b8090;
+    --text-light: #a0b4be;
+    --white: #ffffff;
+    --success: #2d9a6a;
+    --success-bg: #e8f7f0;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--sand);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 3rem;
+  }
+
+  header {
+    background: var(--ocean-dark);
+    color: var(--white);
+    padding: 2rem 1.5rem 3.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 48px;
+    background: var(--sand);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(144,224,239,0.10);
+  }
+  .header-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ocean-light);
+    background: rgba(144,224,239,0.15);
+    padding: 4px 14px;
+    border-radius: 99px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  header h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  header p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 1.5rem 0 1.25rem;
+  }
+  .stat-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 14px 12px;
+    text-align: center;
+    border: 1px solid var(--sand-dark);
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ocean-dark);
+    line-height: 1;
+  }
+  .stat-num span { font-size: 13px; color: var(--text-muted); font-weight: 400; }
+
+  .pbar-wrap {
+    background: var(--sand-dark);
+    border-radius: 99px;
+    height: 6px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .pbar {
+    height: 6px;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--ocean), var(--ocean-light));
+    transition: width 0.4s ease;
+  }
+
+  .section {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--sand-dark);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .sec-hd {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid var(--sand-dark);
+  }
+  .sec-hd:hover { background: var(--sand); }
+  .sec-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--ocean-dark);
+    color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .sec-icon.child { background: var(--coral); }
+  .sec-label {
+    font-size: 14px;
+    font-weight: 700;
+    flex: 1;
+    color: var(--text);
+  }
+  .sec-cnt {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--sand);
+    padding: 3px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--sand-dark);
+  }
+  .chev {
+    font-size: 14px;
+    color: var(--text-light);
+    transition: transform 0.25s;
+  }
+  .chev.collapsed { transform: rotate(-90deg); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  thead th {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    padding: 8px 12px;
+    text-align: center;
+    background: var(--sand);
+    border-bottom: 1px solid var(--sand-dark);
+    letter-spacing: 0.05em;
+  }
+  thead th:first-child { text-align: left; }
+  thead .col-name { width: auto; }
+  thead .col-chk { width: 58px; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--sand);
+    transition: background 0.12s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #fafaf8; }
+
+  td {
+    padding: 10px 12px;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+  .item-name { color: var(--text); transition: color 0.2s; }
+  .item-name.done { text-decoration: line-through; color: var(--text-light); }
+
+  .chk-cell { text-align: center; cursor: pointer; }
+  .chk-cell:hover .chk-box { border-color: var(--ocean); }
+  .chk-box {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 1.5px solid var(--sand-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+    background: var(--white);
+  }
+  .chk-box.on { background: var(--success); border-color: var(--success); }
+  .chk-icon { display: none; color: var(--white); width: 13px; height: 13px; }
+  .chk-box.on .chk-icon { display: block; }
+
+  .shared-note {
+    font-size: 11px;
+    color: var(--text-light);
+    padding: 6px 12px 8px;
+    text-align: center;
+  }
+
+  .bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    padding: 12px 16px;
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--sand-dark);
+  }
+  .bottom-txt { font-size: 12px; color: var(--text-muted); }
+  .btn-reset {
+    font-size: 12px;
+    font-family: 'Noto Sans JP', sans-serif;
+    padding: 6px 16px;
+    border: 1px solid var(--sand-dark);
+    border-radius: 99px;
+    background: var(--white);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-reset:hover { background: var(--sand); }
+
+  @media (max-width: 480px) {
+    thead .col-chk { width: 46px; }
+    td { padding: 9px 8px; }
+    .stat-num { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">Family Trip 2025</div>
+  <h1>沖縄旅行<br>持ち物チェックリスト</h1>
+  <p>夫婦それぞれチェックして、準備を万全に</p>
+</header>
+
+<div class="container">
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">夫 チェック</div>
+      <div class="stat-num" id="stat-h">0<span> 個</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">妻 チェック</div>
+      <div class="stat-num" id="stat-w">0<span> 個</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">両方完了</div>
+      <div class="stat-num" id="stat-b">0<span> / <span id="stat-t">0</span></span></div>
+    </div>
+  </div>
+
+  <div class="pbar-wrap"><div class="pbar" id="pbar" style="width:0%"></div></div>
+
+  <div id="sections"></div>
+
+  <div class="bottom-bar">
+    <span class="bottom-txt">チェック状態はブラウザに自動保存されます</span>
+    <button class="btn-reset" onclick="resetAll()">リセット</button>
+  </div>
+</div>
+
+<script>
+const SECTIONS = [
+  { id: 'child', label: '子どもグッズ', icon: '&#128118;', iconClass: 'child', shared: true, items: [
+    'おむつ','おしりふき','ペットシーツ','ごみ袋','肌着','洋服','水着','プール用のおむつ',
+    '浮き輪','帽子','よだれかけ','ガーゼ','ブランケット（タオル）','ボディソープ','保湿剤',
+    'ベビーカー','ベビーカーレインカバー','ショルダースリング','おもちゃ（オーボール・絵本）',
+    '日焼け止め','歯ブラシ','アレルギー用の薬','おやつ','ベビーフード','体温計'
+  ]},
+  { id: 'adult', label: '大人グッズ', icon: '&#128100;', iconClass: '', shared: false, items: [
+    '洋服','下着','水着','プール用ボール','お風呂グッズ','サウナグッズ','防寒具','コンタクト',
+    'メイク道具','アイロン','充電器系','カメラ','Gopro','日焼け止め','救急セット',
+    '母子手帳','財布','常備薬','保険証','運転免許証','ハンディファン',
+    '結婚式用のサンダル/スニーカー','ご祝儀・袱紗','虫よけスプレー','ジップロック/ビニール袋'
+  ]}
+];
+
+const STORE = 'okinawa-checklist';
+let state = {};
+let collapsed = {};
+
+function load() {
+  try { state = JSON.parse(localStorage.getItem(STORE) || '{}'); } catch(e) { state = {}; }
+}
+function save() {
+  try { localStorage.setItem(STORE, JSON.stringify(state)); } catch(e) {}
+}
+
+function key(secId, i, p) { return secId + '_' + i + '_' + p; }
+
+function totalItems() { return SECTIONS.reduce((s, sec) => s + sec.items.length, 0); }
+
+function updateProgress() {
+  const t = totalItems();
+  let h = 0, w = 0, b = 0;
+  SECTIONS.forEach(sec => {
+    sec.items.forEach((_, i) => {
+      const hv = !!state[key(sec.id, i, 'h')];
+      const wv = sec.shared ? hv : !!state[key(sec.id, i, 'w')];
+      if (hv) h++;
+      if (wv) w++;
+      if (hv && wv) b++;
+    });
+  });
+  document.getElementById('stat-h').innerHTML = h + '<span> 個</span>';
+  document.getElementById('stat-w').innerHTML = w + '<span> 個</span>';
+  document.getElementById('stat-b').innerHTML = b + '<span> / <span id="stat-t">' + t + '</span></span>';
+  document.getElementById('pbar').style.width = Math.round(b / t * 100) + '%';
+}
+
+function updateSecCount(secId) {
+  const sec = SECTIONS.find(s => s.id === secId);
+  const done = sec.items.filter((_, i) => {
+    const hv = !!state[key(secId, i, 'h')];
+    return sec.shared ? hv : (hv && !!state[key(secId, i, 'w')]);
+  }).length;
+  const el = document.getElementById('cnt_' + secId);
+  if (el) el.textContent = done + ' / ' + sec.items.length;
+}
+
+function toggle(secId, i, person) {
+  const sec = SECTIONS.find(s => s.id === secId);
+  if (sec.shared) {
+    const k = key(secId, i, 'h');
+    state[k] = !state[k];
+    ['h','w'].forEach(p => {
+      const box = document.getElementById('chk_' + secId + '_' + i + '_' + p);
+      if (box) box.classList.toggle('on', !!state[k]);
+    });
+    const nm = document.getElementById('name_' + secId + '_' + i);
+    if (nm) nm.classList.toggle('done', !!state[k]);
+  } else {
+    const k = key(secId, i, person);
+    state[k] = !state[k];
+    const box = document.getElementById('chk_' + secId + '_' + i + '_' + person);
+    if (box) box.classList.toggle('on', !!state[k]);
+    const hv = !!state[key(secId, i, 'h')];
+    const wv = !!state[key(secId, i, 'w')];
+    const nm = document.getElementById('name_' + secId + '_' + i);
+    if (nm) nm.classList.toggle('done', hv && wv);
+  }
+  updateSecCount(secId);
+  updateProgress();
+  save();
+}
+
+function toggleSection(secId) {
+  collapsed[secId] = !collapsed[secId];
+  const body = document.getElementById('body_' + secId);
+  const chev = document.getElementById('chev_' + secId);
+  if (body) body.style.display = collapsed[secId] ? 'none' : '';
+  if (chev) chev.classList.toggle('collapsed', collapsed[secId]);
+}
+
+function resetAll() {
+  if (!confirm('チェックをすべてリセットしますか？')) return;
+  state = {};
+  SECTIONS.forEach(sec => {
+    sec.items.forEach((_, i) => {
+      ['h','w'].forEach(p => {
+        const box = document.getElementById('chk_' + sec.id + '_' + i + '_' + p);
+        if (box) box.classList.remove('on');
+      });
+      const nm = document.getElementById('name_' + sec.id + '_' + i);
+      if (nm) nm.classList.remove('done');
+    });
+    updateSecCount(sec.id);
+  });
+  updateProgress();
+  save();
+}
+
+const checkSVG = `<svg class="chk-icon" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="2,7 5,10 11,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+function render() {
+  const container = document.getElementById('sections');
+  container.innerHTML = SECTIONS.map(sec => {
+    const thead = sec.shared
+      ? `<th class="col-name">アイテム</th><th class="col-chk" colspan="2">チェック</th>`
+      : `<th class="col-name">アイテム</th><th class="col-chk">夫</th><th class="col-chk">妻</th>`;
+    const rows = sec.items.map((item, i) => {
+      const hv = !!state[key(sec.id, i, 'h')];
+      const wv = sec.shared ? hv : !!state[key(sec.id, i, 'w')];
+      const done = sec.shared ? hv : (hv && wv);
+      return `<tr>
+        <td><span class="item-name${done?' done':''}" id="name_${sec.id}_${i}">${item}</span></td>
+        <td class="chk-cell" onclick="toggle('${sec.id}',${i},'h')">
+          <div class="chk-box${hv?' on':''}" id="chk_${sec.id}_${i}_h">${checkSVG}</div>
+        </td>
+        <td class="chk-cell" ${sec.shared ? '' : `onclick="toggle('${sec.id}',${i},'w')"`}>
+          ${sec.shared ? '' : `<div class="chk-box${wv?' on':''}" id="chk_${sec.id}_${i}_w">${checkSVG}</div>`}
+        </td>
+      </tr>`;
+    }).join('');
+    return `<div class="section">
+      <div class="sec-hd" onclick="toggleSection('${sec.id}')">
+        <div class="sec-icon ${sec.iconClass}">${sec.icon}</div>
+        <span class="sec-label">${sec.label}</span>
+        <span class="sec-cnt" id="cnt_${sec.id}">0 / ${sec.items.length}</span>
+        <span class="chev" id="chev_${sec.id}">&#9660;</span>
+      </div>
+      <div id="body_${sec.id}">
+        <table><thead><tr>${thead}</tr></thead><tbody>${rows}</tbody></table>
+        ${sec.shared ? '<div class="shared-note">子どもグッズはどちらがチェックしても同期されます</div>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+  SECTIONS.forEach(sec => updateSecCount(sec.id));
+  updateProgress();
+}
+
+load();
+render();
+</script>
+</body>
+</html>
